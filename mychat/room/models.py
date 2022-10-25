@@ -7,7 +7,7 @@ from requests import options
 def user_directory_path(instance, filename): # Создание папка с контентом под каждого пользователя
     return 'user_{0}/{1}'.format(instance.user.id, filename)
 
-class ChatUser (User):
+class  ChatUser(User):
     avatar = models.ImageField(upload_to=user_directory_path)
     avatar_thumbnail = ImageSpecField (source = 'avatar', 
         processors = [ResizeToFill(150,150)],
@@ -16,4 +16,19 @@ class ChatUser (User):
 
 class Room (models.Model):
     creater = models.ForeignKey(ChatUser, verbose_name='Создатель', on_delete=models.CASCADE)
-    
+    invited = models.ManyToManyField(ChatUser, verbose_name='Участники', on_delete=models.CASCADE)
+    date = models.DateTimeField('Дата создания', auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Комната чата'
+        verbose_name_plural = 'Комнаты чатов'
+
+class Message(models.Model):
+    room = models.ForeignKey(Room, verbose_name='Комната чата', on_delete=models.CASCADE)
+    user = models.ForeignKey(ChatUser, verbose_name="Пользователь", on_delete=models.CASCADE)
+    text = models.TextField("Сообщение", max_length=500)
+    date = models.DateTimeField("Дата отправки", auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Сообщение чата"
+        verbose_name_plural = "Сообщения чатов"
