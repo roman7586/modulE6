@@ -1,6 +1,8 @@
-from tkinter import _ImageSpec
 from django.db import models
-from requests import options
+from django.contrib.auth.models import User
+from autoslug import AutoSlugField
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
 
 # Create your models here.
 
@@ -16,7 +18,7 @@ class  ChatUser(User):
 
 class Room (models.Model):
     creater = models.ForeignKey(ChatUser, verbose_name='Создатель', on_delete=models.CASCADE)
-    invited = models.ManyToManyField(ChatUser, verbose_name='Участники', on_delete=models.CASCADE)
+    invited = models.ManyToManyField(ChatUser, verbose_name='Участники', related_name='invited')
     date = models.DateTimeField('Дата создания', auto_now_add=True)
 
     class Meta:
