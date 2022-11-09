@@ -10,11 +10,11 @@ def user_directory_path(instance, filename): # Создание папка с к
     return 'user_{0}/{1}'.format(instance.user.id, filename)
 
 class  ChatUser(User):
-    avatar = models.ImageField(upload_to=user_directory_path)
-    avatar_thumbnail = ImageSpecField (source = 'avatar', 
-        processors = [ResizeToFill(150,150)],
-        format = 'JPEG',
-        options = {'quality': 100})
+    avatar = models.ImageField(default='avatars/default.jpg', height_field='150', upload_to=user_directory_path, width_field='150')
+#    avatar_thumbnail = ImageSpecField (source = 'avatar', 
+#        processors = [ResizeToFill(150,150)],
+ #       format = 'JPEG',
+  #      options = {'quality': 100})
 
 class Room (models.Model):
     creater = models.ForeignKey(ChatUser, verbose_name='Создатель', on_delete=models.CASCADE)
